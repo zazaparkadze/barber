@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { MapPin, Phone, Wallet, AlertCircle, Check, Loader2 } from "lucide-react"
-import { SERVICE_DURATIONS } from "@/lib/appointments"
+import { SERVICE_DURATIONS } from "@/app/config/hours"
+import {phone, address} from "@/app/config/address"
 
 interface FormData {
   name: string
@@ -249,7 +250,7 @@ export default function ReservationForm() {
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                placeholder="(555) 123-4567"
+                placeholder={phone}
                 className="w-full rounded-3xl border border-white/10 bg-slate-900/90 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-amber-400/60"
                 required
               />
@@ -398,7 +399,7 @@ export default function ReservationForm() {
               <p className="text-sm uppercase tracking-[0.24em] text-slate-400">
                 Location
               </p>
-              <p>123 Main Street, Downtown</p>
+              <p>{address.street}, {address.city}, {address.country}</p>
             </div>
           </div>
           <div className="flex items-center gap-3 text-slate-300">
@@ -407,7 +408,7 @@ export default function ReservationForm() {
               <p className="text-sm uppercase tracking-[0.24em] text-slate-400">
                 Phone
               </p>
-              <p>(555) 123‑4567</p>
+              <p>{phone}</p>
             </div>
           </div>
           <div className="flex items-center gap-3 text-slate-300">

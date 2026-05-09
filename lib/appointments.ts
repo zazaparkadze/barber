@@ -1,10 +1,13 @@
 // Simple in-memory appointment store
 // In production, use a database like PostgreSQL or MongoDB
+'use server'
 import Appointment from "@/model/Appointment"
 import connectDB from "./connectBD"
+import { BUSINESS_HOURS } from "@/app/config/hours"
+
 
 export interface Appointment {
-  id: string
+  id: number
   name: string
   email: string
   phone: string
@@ -17,29 +20,11 @@ export interface Appointment {
   createdAt: Date
 }
 
-//const appointments: Appointment[] = []
-const appointments: Appointment[] = []
-
-export const SERVICE_DURATIONS: Record<string, number> = {
-  "Classic Cut": 30,
-  Fade: 30,
-  "Beard Trim": 20,
-  "Hot Towel Shave": 40,
-  "Grooming Package": 60,
-}
-
-export const BUSINESS_HOURS = {
-  open: 9, // 9 AM
-  close: 20, // 8 PM
-  breakStart: 13, // 1 PM
-  breakEnd: 14, // 2 PM
-}
-
-export function isSlotAvailable(
+export async function isSlotAvailable(
   date: string,
   time: string,
   duration: number
-): boolean {
+): Promise<boolean> {
   const [hours, minutes] = time.split(":").map(Number)
   const slotStartTime = hours * 60 + minutes
   const slotEndTime = slotStartTime + duration
@@ -62,6 +47,7 @@ export function isSlotAvailable(
   }
 
   // Check for conflicting appointments
+  const appointments: Appointment[] = await Appointment.find().sort({ createdAt: -1 }).exec()
   const conflictingAppointment = appointments.find((appt) => {
     if (appt.date !== date || !appt.confirmed) return false
 
@@ -79,9 +65,10 @@ export function isSlotAvailable(
 export async function createAppointment(
   appointmentData: Omit<Appointment, "id" | "confirmed" | "createdAt">
 ): Promise<Appointment> {
-  connectDB() // Ensure DB connection is established
+  await connectDB() // Ensure DB connection is established
+  const appointmentsCount = await Appointment.countDocuments() // Get current count for ID generation
   const new_appointment: Appointment = {
-    id: Date.now().toString(),
+    id: appointmentsCount > 0 ? appointmentsCount + 1 : 1,
     ...appointmentData,
     confirmed: false,
     createdAt: new Date(),
@@ -92,25 +79,31 @@ export async function createAppointment(
 }
 
 export async function confirmAppointment(
-  id: string
+  id: number
 ): Promise<Appointment | null> {
-  connectDB() // Ensure DB connection is established
-  const appointment = await Appointment.findByIdAndUpdate(
-    id,
+  await connectDB() // Ensure DB connection is established
+  const appointment = await Appointment.findOneAndUpdate(
+    { id },
     { confirmed: true },
-    { new: true }
+    {  returnDocument: "after" }
   )
   return appointment || null
 }
 
-export async function getAppointment(id: string): Promise<Appointment | null> {
-  connectDB() // Ensure DB connection is established
-  const appointment = await Appointment.findById(id)
-  return appointment || null
+export async function getAppointment(id: number): Promise<Appointment | null> {
+  await connectDB() // Ensure DB connection is established
+  const appointment: Appointment | null = await Appointment.findOne({ id })
+  return appointment
 }
 
 export async function getAllAppointments(): Promise<Appointment[]> {
-  connectDB() // Ensure DB connection is established
-  const appointments = await Appointment.find().sort({ createdAt: -1 }).exec()
+  await connectDB() // Ensure DB connection is established
+  const appointments: Appointment[] = await Appointment.find().sort({ createdAt: -1 }).exec()
   return appointments
+}
+
+export async function deleteAppointment(id: number): Promise<boolean> {
+  await connectDB() // Ensure DB connection is established
+  const result = await Appointment.deleteOne({ id })
+  return result.deletedCount > 0
 }

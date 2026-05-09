@@ -1,6 +1,7 @@
 "use server"
 
 import { Appointment } from "@/lib/appointments"
+import { address, phone } from "@/app/config/address"
 
 // Email notification function
 // For production, integrate with SendGrid, Resend, or similar
@@ -18,11 +19,11 @@ Your barber appointment has been confirmed!
 📅 Date: ${new Date(appointment.date).toLocaleDateString()}
 ⏰ Time: ${appointment.time}
 ✂️ Service: ${appointment.service}
-📍 Location: 123 Main Street, Downtown
+📍 Location: ${address.street}, ${address.city}, ${address.country}
 
 Duration: ${appointment.duration} minutes
 
-If you need to reschedule or cancel, please call us at (555) 123-4567 or reply to this email.
+If you need to reschedule or cancel, please call us at ${phone} or reply to this email.
 
 See you soon!
 Barber Shop Team
@@ -48,9 +49,9 @@ export async function sendConfirmationSMS(appointment: Appointment): Promise<boo
     const smsContent = `Hi ${appointment.name}, your barber appointment is confirmed! 
 📅 ${new Date(appointment.date).toLocaleDateString()} at ${appointment.time}
 ✂️ ${appointment.service} (${appointment.duration} min)
-📍 123 Main Street, Downtown
+📍 ${address.street}, ${address.city}, ${address.country}
 
-Call (555) 123-4567 to reschedule. See you soon! - Barber Shop`
+Call ${phone} to reschedule. See you soon! - Barber Shop`
 
     // Placeholder for actual SMS/WhatsApp sending
     // Example: await twilio.messages.create({ to: appointment.phone, body: smsContent })
@@ -77,7 +78,7 @@ Unfortunately, your requested appointment time on ${new Date(appointment.date).t
 Please visit our booking page to choose another time that works for you:
 https://barbershop.com/reserve
 
-Or call us at (555) 123-4567.
+Or call us at ${phone}.
 
 We look forward to seeing you!
 Barber Shop Team

@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
 import {
   isSlotAvailable,
-  SERVICE_DURATIONS,
   createAppointment,
   confirmAppointment,
+  getAllAppointments,
+  deleteAppointment,
 } from "@/lib/appointments"
 import { sendConfirmationEmail, sendConfirmationSMS } from "@/app/actions"
+import { SERVICE_DURATIONS } from "@/app/config/hours"
 
 // Check availability for a given date and time
 export async function POST(request: NextRequest) {
@@ -29,7 +31,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const available = isSlotAvailable(date, time, duration)
+    const available = await isSlotAvailable(date, time, duration)
 
     return NextResponse.json({
       available,
@@ -59,7 +61,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Final availability check
-    const available = isSlotAvailable(date, time, duration)
+    const available = await isSlotAvailable(date, time, duration)
     if (!available) {
       return NextResponse.json(
         {
@@ -71,7 +73,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create appointment
-    const appointment = createAppointment({
+    const appointment = await createAppointment({
       name,
       email,
       phone,
@@ -106,4 +108,53 @@ export async function POST(request: NextRequest) {
   }
 
   return NextResponse.json({ error: "Invalid action" }, { status: 400 })
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const appointments = await getAllAppointments()
+    return NextResponse.json({
+      success: true,
+      appointments,
+    })
+  } catch (error) {
+    console.error("Error fetching appointments:", error)
+    return NextResponse.json(
+      { error: "Failed to fetch appointments" },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const { id } = await request.json()
+
+    if (!id || typeof id !== "number") {
+      return NextResponse.json(
+        { error: "Invalid appointment ID" },
+        { status: 400 }
+      )
+    }
+
+    const deleted = await deleteAppointment(id)
+
+    if (!deleted) {
+      return NextResponse.json(
+        { error: "Appointment not found" },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Appointment deleted successfully",
+    })
+  } catch (error) {
+    console.error("Error deleting appointment:", error)
+    return NextResponse.json(
+      { error: "Failed to delete appointment" },
+      { status: 500 }
+    )
+  }
 }
