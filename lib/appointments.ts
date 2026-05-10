@@ -47,6 +47,7 @@ export async function isSlotAvailable(
   }
 
   // Check for conflicting appointments
+  await connectDB() // Ensure DB connection is established
   const appointments: Appointment[] = await Appointment.find().sort({ createdAt: -1 }).exec()
   const conflictingAppointment = appointments.find((appt) => {
     if (appt.date !== date || !appt.confirmed) return false
@@ -66,9 +67,9 @@ export async function createAppointment(
   appointmentData: Omit<Appointment, "id" | "confirmed" | "createdAt">
 ): Promise<Appointment> {
   await connectDB() // Ensure DB connection is established
-  const appointmentsCount = await Appointment.countDocuments() // Get current count for ID generation
+  const appointments = await Appointment.find({}).lean() // Get current count for ID generation
   const new_appointment: Appointment = {
-    id: appointmentsCount > 0 ? appointmentsCount + 1 : 1,
+    id: appointments.length > 0 ? appointments[appointments.length - 1].id + 1 : 1,
     ...appointmentData,
     confirmed: false,
     createdAt: new Date(),

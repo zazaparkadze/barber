@@ -250,7 +250,7 @@ export default function ReservationForm() {
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                placeholder={phone}
+                placeholder={"your phone"}
                 className="w-full rounded-3xl border border-white/10 bg-slate-900/90 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-amber-400/60"
                 required
               />

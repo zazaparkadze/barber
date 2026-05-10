@@ -25,3 +25,13 @@ type MongoUserData = {
   firstjob: string
   email: string
 }
+
+interface Service {
+  id: string
+  name: string
+  price: string
+  duration: string
+  description: string
+  features: string[]
+  images: string[]
+}
