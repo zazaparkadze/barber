@@ -1,4 +1,4 @@
-export const services : Service [] = [
+export const services_new : Service [] = [
   {
     id: "classic-cut",
     name: "Classic Cut",
@@ -8,9 +8,9 @@ export const services : Service [] = [
       "Traditional barber cut with precision fade, neck shave, and styling. Perfect for the timeless gentleman.",
     features: ["Precision fade", "Neck shave", "Hot towel finish", "Styling"],
     images: [
-      "/api/placeholder/400/500?style=classic-1",
-      "/api/placeholder/400/500?style=classic-2",
-      "/api/placeholder/400/500?style=classic-3",
+      "/images/women/image-1.jpg",
+      "/images/women/image-2.jpg",
+      "/images/women/image-3.jpg"
     ],
   },
   {
@@ -22,9 +22,9 @@ export const services : Service [] = [
       "Modern fade with clean lines and tapered sides. Available in various lengths and styles.",
     features: ["Custom fade", "Tapered sides", "Clean lines", "Modern styling"],
     images: [
-      "/api/placeholder/400/500?style=fade-1",
-      "/api/placeholder/400/500?style=fade-2",
-      "/api/placeholder/400/500?style=fade-3",
+      "/images/children/image-1.jpg",
+      "/images/children/image-2.jpg",
+      "/images/children/image-3.jpg"
     ],
   },
   {
@@ -41,9 +41,9 @@ export const services : Service [] = [
       "Maintenance advice",
     ],
     images: [
-      "/api/placeholder/400/500?style=beard-1",
-      "/api/placeholder/400/500?style=beard-2",
-      "/api/placeholder/400/500?style=beard-3",
+      "/images/men/image-1.jpg",
+      "/images/men/image-2.jpg",
+      "/images/men/image-3.jpg"
     ],
   },
   {
@@ -60,9 +60,9 @@ export const services : Service [] = [
       "Relaxing experience",
     ],
     images: [
-      "/api/placeholder/400/500?style=shave-1",
-      "/api/placeholder/400/500?style=shave-2",
-      "/api/placeholder/400/500?style=shave-3",
+      "/images/men/image-1.jpg",
+      "/images/men/image-2.jpg",
+      "/images/men/image-3.jpg"
     ],
   },
   {
@@ -79,9 +79,9 @@ export const services : Service [] = [
       "Premium products",
     ],
     images: [
-      "/api/placeholder/400/500?style=package-1",
-      "/api/placeholder/400/500?style=package-2",
-      "/api/placeholder/400/500?style=package-3",
+     "/images/men/image-1.jpg",
+      "/images/men/image-2.jpg",
+      "/images/men/image-3.jpg"
     ],
   },
   {
@@ -98,9 +98,9 @@ export const services : Service [] = [
       "Premium products",
     ],
     images: [
-      "/api/placeholder/400/500?style=package-1",
-      "/api/placeholder/400/500?style=package-2",
-      "/api/placeholder/400/500?style=package-3",
+      "/images/men/image-1.jpg",
+      "/images/men/image-2.jpg",
+      "/images/men/image-3.jpg"
     ],
   },
 ]
