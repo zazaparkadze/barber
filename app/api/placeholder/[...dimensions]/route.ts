@@ -30,9 +30,9 @@ export async function GET(request: NextRequest) {
       </defs>
       <rect width="100%" height="100%" fill="url(#grad)"/>
       <circle cx="50%" cy="35%" r="25%" fill="${colors.primary}" opacity="0.1"/>
-      <text x="50%" y="40%" text-anchor="middle" fill="${colors.primary}" font-family="Arial, sans-serif" font-size="18" font-weight="bold">BARBER</text>
-      <text x="50%" y="55%" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="14">Style Preview</text>
-      <text x="50%" y="70%" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="12">${style.toUpperCase()}</text>
+      <text x="50%" y="40%" text-anchor="middle" fill="${colors.primary}" font-family="Arial, sans-serif" font-size="48" font-weight="bold">BARBER</text>
+      <text x="50%" y="55%" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="44">Style Preview</text>
+      <text x="50%" y="70%" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="34">${style.toUpperCase()}</text>
     </svg>
   `
 
