@@ -5,21 +5,6 @@ import Appointment from "@/model/Appointment"
 import connectDB from "./connectBD"
 import { BUSINESS_HOURS } from "@/app/config/hours"
 
-
-export interface Appointment {
-  id: number
-  name: string
-  email: string
-  phone: string
-  service: string
-  date: string
-  time: string
-  duration: number
-  notes: string
-  confirmed: boolean
-  createdAt: Date
-}
-
 export async function isSlotAvailable(
   date: string,
   time: string,

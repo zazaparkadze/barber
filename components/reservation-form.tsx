@@ -6,6 +6,7 @@ import { MapPin, Phone, Wallet, AlertCircle, Check, Loader2 } from "lucide-react
 import { SERVICE_DURATIONS } from "@/app/config/hours"
 import {phone, address} from "@/app/config/address"
 
+
 interface FormData {
   name: string
   email: string
@@ -16,29 +17,6 @@ interface FormData {
   notes: string
 }
 
-interface AvailabilityResult {
-  available: boolean
-  duration: number
-  message: string
-}
-
-interface AppointmentResponse {
-  success?: boolean
-  error?: string
-  requiresReschedule?: boolean
-  appointment?: {
-    id: string
-    name: string
-    date: string
-    time: string
-    service: string
-  }
-  notifications?: {
-    email: boolean
-    sms: boolean
-  }
-  message?: string
-}
 
 export default function ReservationForm() {
   const [formData, setFormData] = useState<FormData>({
