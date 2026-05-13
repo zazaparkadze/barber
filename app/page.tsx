@@ -8,6 +8,7 @@ import {
   Scissors,
   Sparkles,
 } from "lucide-react"
+import { serviceTypesShort } from "./config/service-types-short"
 
 export default function Page() {
   return (
@@ -40,8 +41,11 @@ export default function Page() {
             >
               <Link href="/reserve">Book now</Link>
             </Button>
-            <Button asChild variant="outline" size="lg">
+            <Button asChild size="lg" className="bg-amber-400 text-slate-950 hover:bg-amber-300">
               <Link href="/login">Admin</Link>
+            </Button>
+            <Button asChild size="lg" className="bg-amber-400 text-slate-950 hover:bg-amber-300">
+              <Link href="/cancellation">Cancellation</Link>
             </Button>
           </div>
         </header>
@@ -65,7 +69,7 @@ export default function Page() {
               <Button
                 asChild
                 size="lg"
-                className="bg-amber-400 text-slate-950 hover:bg-amber-300"
+                className="bg-amber-400 text-slate-950 hove0r:bg-amber-300"
               >
                 <Link href="/reserve">Reserve a seat</Link>
               </Button>
@@ -118,23 +122,7 @@ export default function Page() {
         </section>
 
         <section className="grid gap-6 pb-10 md:grid-cols-3">
-          {[
-            {
-              title: "Haircuts",
-              description:
-                "Modern fades, skin tapers, scissor cuts, and tailored styling shaped to your face.",
-            },
-            {
-              title: "Beard & Shaves",
-              description:
-                "Precision beard sculpting, hot towel shaves, and grooming packages for a polished finish.",
-            },
-            {
-              title: "Grooming",
-              description:
-                "Product recommendations, detailing, and maintenance advice for your best look.",
-            },
-          ].map((service) => (
+          {serviceTypesShort.map((service) => (
             <article
               key={service.title}
               className="rounded-[2rem] border border-white/10 bg-slate-950/80 p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.45)] transition hover:-translate-y-1 hover:border-amber-400/20 hover:bg-slate-950"

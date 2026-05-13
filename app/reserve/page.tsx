@@ -1,7 +1,7 @@
 import Link from "next/link"
 import ReservationForm from "@/components/reservation-form"
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, CalendarDays, MapPin, Scissors, User, Wallet } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 
 export default function ReservePage() {
   return (
@@ -22,7 +22,6 @@ export default function ReservePage() {
             </Link>
           </Button>
         </div>
-
         <ReservationForm />
       </div>
     </main>

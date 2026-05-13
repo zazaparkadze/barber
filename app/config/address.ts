@@ -6,4 +6,4 @@ export const address = {
 
 export const phone = "+972-584080569"
 
-export const email = "mishka@parkadze.com"
+export const email = "zaza.parkadze@gmail.com"

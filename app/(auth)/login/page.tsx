@@ -61,7 +61,7 @@ export default function page() {
           submit
         </Button>
 
-        <div className="my-[-4] flex w-full flex-col items-end gap-2 px-6">
+        <div className="my-[-4] flex w-full h-fit flex-col items-end gap-2 px-6">
           <p className="hover:scale-110">
             <Link href={"/forgot-password"}>forgot password</Link>
           </p>

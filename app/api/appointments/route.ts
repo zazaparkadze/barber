@@ -6,7 +6,8 @@ import {
   getAllAppointments,
   deleteAppointment,
 } from "@/lib/appointments"
-import { sendConfirmationEmail, sendConfirmationSMS } from "@/app/actions"
+import { sendConfirmationSMS } from "@/app/actions"
+import { sendConfirmationEmail } from "@/lib/sendConfirmationEmail"
 import { SERVICE_DURATIONS } from "@/app/config/hours"
 
 // Check availability for a given date and time

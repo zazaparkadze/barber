@@ -1,6 +1,6 @@
 import { services } from "@/app/config/services"
 import { services_new } from "@/app/config/services-new"
-import Header from "@/components/header"
+import Header from "@/components/services-header"
 import Footer from "@/components/footer"
 import Service from "@/components/service"
 
