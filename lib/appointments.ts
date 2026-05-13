@@ -84,7 +84,6 @@ export async function getAppointment(id: number): Promise<Appointment | null> {
 export async function getAppointmentDateTime(date: string, time: string): Promise<Appointment | null> {
   await connectDB() // Ensure DB connection is established
   const appointment: Appointment | null = await Appointment.findOne({ date, time })
-  console.log("Found appointment:", appointment)
   return JSON.parse(JSON.stringify(appointment))
 }
 

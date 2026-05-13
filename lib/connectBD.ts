@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 export default async function connectDB() {
   if (mongoose.connection?.readyState === 1) {
-    console.log("✅ MongoDB already connected")
+     console.log("✅ MongoDB already connected")
     return
   }
 

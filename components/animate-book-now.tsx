@@ -1,4 +1,4 @@
-import { scale, useAnimate } from "motion/react"
+import { useAnimate } from "motion/react"
 import { useEffect } from "react"
 import * as motion from "motion/react-client"
 

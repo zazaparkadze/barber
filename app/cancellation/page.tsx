@@ -75,7 +75,6 @@ export default function CancellationForm() {
       return
     }
 
-    console.log("Found appointment id:", foundAppointment.id)
     try {
       const response = await fetch("/api/appointments", {
         method: "DELETE",

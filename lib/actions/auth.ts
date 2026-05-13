@@ -71,7 +71,7 @@ export async function handleRegister(formData: FormData) {
   const valPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])[^\s]{8,}$/.test(
     password
   )
-  console.log(password, valPass)
+
   if (valPass) {
     const users: MongoUser[] = await User.find({}).lean()
 
@@ -135,8 +135,6 @@ export async function changeUserPwd(formData: FormData) {
   connectDB()
   const newPwd = formData.get("newPwd") as string
   const id = formData.get("id")
-  console.log(typeof formData)
-
   const newHashedPwd = await bcrypt.hash(newPwd, 10)
   const updatedUser: MongoUser | null = await User.findOneAndUpdate(
     { id: Number(id) },
@@ -145,7 +143,6 @@ export async function changeUserPwd(formData: FormData) {
   )
 
   if (updatedUser) {
-    console.log(updatedUser)
     return JSON.parse(JSON.stringify(updatedUser))
   } else {
     return JSON.stringify({ message: "no user found" })

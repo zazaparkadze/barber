@@ -18,7 +18,6 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         if(result.id === Number(id)) {
                router.refresh()
         }
-        console.log(result)
       }}
     >
       <h1 className="text-4xl">Change Password</h1>
