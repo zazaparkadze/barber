@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { MapPin, Phone, Wallet, AlertCircle, Check, Loader2 } from "lucide-react"
 import { SERVICE_DURATIONS } from "@/app/config/hours"
 import {phone, address} from "@/app/config/address"
+import AnimateBookNow from "./animate-book-now"
 
 
 interface FormData {
@@ -190,7 +191,7 @@ export default function ReservationForm() {
             Choose a time, select a service, and leave any special notes for your barber. We&apos;ll confirm your reservation and make sure everything is ready when you arrive.
           </p>
         </div>
-
+  <AnimateBookNow />
         <form onSubmit={handleSubmit} className="space-y-6 rounded-[1.75rem] bg-slate-950/75 p-6 ring-1 ring-white/10">
           {/* Error Message */}
           {error && (

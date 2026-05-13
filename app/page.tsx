@@ -9,6 +9,7 @@ import {
   Sparkles,
 } from "lucide-react"
 import { serviceTypesShort } from "./config/service-types-short"
+import AnimateBookNow from "@/components/animate-book-now"
 
 export default function Page() {
   return (
@@ -32,6 +33,7 @@ export default function Page() {
             <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
               Crafting sharp looks with precision and polish.
             </h1>
+          
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button

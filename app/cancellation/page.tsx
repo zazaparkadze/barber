@@ -2,38 +2,38 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import {
-  MapPin,
-  Phone,
-  AlertCircle,
-  Loader2,
-} from "lucide-react"
+import { MapPin, Phone, AlertCircle, Loader2 } from "lucide-react"
 import { phone, address } from "@/app/config/address"
+import { getAppointmentDateTime } from "@/lib/appointments"
+import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 
-interface FormDataC {
+
+interface FormData {
   name: string
   email: string
   phone: string
-  id: string
+  service: string
+  date: string
+  time: string
+  notes: string
 }
 
 export default function CancellationForm() {
-  const [formData, setFormData] = useState<FormDataC>({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     phone: "",
-    id: "",
+    service: "Classic Cut",
+    date: "",
+    time: "",
+    notes: "",
   })
 
-  const [availability, setAvailability] = useState<AvailabilityResult | null>(
-    null
-  )
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
-  const [foundAppointment, setFoundAppointment] = useState(false)
+ 
   const [error, setError] = useState<string | null>(null)
-  const [appointmentResult, setAppointmentResult] =
-    useState<AppointmentResponse | null>(null)
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -45,9 +45,9 @@ export default function CancellationForm() {
     setError(null)
   }
 
- 
-
-  const handleSubmitForCancellation = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitForCancellation = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
@@ -56,36 +56,41 @@ export default function CancellationForm() {
       !formData.name ||
       !formData.email ||
       !formData.phone ||
-      !formData.id
+      !formData.date ||
+      !formData.time
     ) {
       setError("Please fill in all required fields")
       setLoading(false)
       return
     }
+    /// find an appointment with the same details
 
+    const foundAppointment = await getAppointmentDateTime(
+      formData.date,
+      formData.time
+    )
+    if (!foundAppointment) {
+      setError("No appointment found with the provided date and time.")
+      setLoading(false)
+      return
+    }
+
+    console.log("Found appointment id:", foundAppointment.id)
     try {
       const response = await fetch("/api/appointments", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: Number(formData.id),
+          id: foundAppointment?.id,
         }),
       })
 
-      const result: AppointmentResponse = await response.json()
-
-      if (response.status === 409) {
-        setError(
-          result.error ||
-            "Time slot is no longer available. Please choose another time."
-        )
+      if (!response) {
+        setError("not deleted, internal server error.")
         setFormData((prev) => ({ ...prev, date: "", time: "" }))
-        setAvailability(null)
-      } else if (!response.ok) {
-        setError(result.error || "Failed to find appointment")
       } else {
-        setAppointmentResult(result)
         setSubmitted(true)
+        setFormData((prev) => ({ ...prev, date: "", time: "", name: "", email: "", phone: "" }))
       }
     } catch (err) {
       setError("Failed to find appointment. Please try again.")
@@ -96,7 +101,7 @@ export default function CancellationForm() {
   }
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[0.9fr_0.6fr] mx-auto max-w-7xl px-4 py-12">
+    <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 lg:grid-cols-[0.9fr_0.6fr]">
       <section className="space-y-8 rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.45)]">
         <div className="space-y-4">
           <p className="text-sm tracking-[0.24em] text-amber-300/80 uppercase">
@@ -106,12 +111,18 @@ export default function CancellationForm() {
             Fill out the form bellow, Press on Cancellation Button.
           </p>
         </div>
-
+        {submitted && (
+          <div className="flex items-start gap-3 rounded-[1.5rem] border border-green-400/30 bg-green-950/30 p-4 text-green-200">
+            <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
+            <div>
+              <p className="font-semibold">Your appointment has been cancelled.</p>
+            </div>
+          </div>
+        )}
         <form
           onSubmit={handleSubmitForCancellation}
           className="space-y-6 rounded-[1.75rem] bg-slate-950/75 p-6 ring-1 ring-white/10"
         >
-          {/* Error Message */}
           {error && (
             <div className="flex items-start gap-3 rounded-[1.5rem] border border-red-400/30 bg-red-950/30 p-4 text-red-200">
               <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
@@ -153,7 +164,32 @@ export default function CancellationForm() {
               />
             </label>
           </div>
+          <div className="grid gap-6 sm:grid-cols-2">
+            <label className="space-y-2 text-sm text-slate-300">
+              Date *
+              <input
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleInputChange}
+                className="w-full rounded-3xl border border-white/10 bg-slate-900/90 px-4 py-3 text-white transition outline-none focus:border-amber-400/60"
+                //min={new Date().toISOString().split("T")[0]}
+                required
+              />
+            </label>
 
+            <label className="space-y-2 text-sm text-slate-300">
+              Time *
+              <input
+                type="time"
+                name="time"
+                value={formData.time}
+                onChange={handleInputChange}
+                className="w-full rounded-3xl border border-white/10 bg-slate-900/90 px-4 py-3 text-white transition outline-none focus:border-amber-400/60"
+                required
+              />
+            </label>
+          </div>
           <div className="grid gap-6 sm:grid-cols-2">
             <label className="space-y-2 text-sm text-slate-300">
               Email *
@@ -167,23 +203,11 @@ export default function CancellationForm() {
                 required
               />
             </label>
-
-             <label className="space-y-2 text-sm text-slate-300">
-              Appointment ID*
-              <input
-                type="id"
-                name="id"
-                value={formData.id}
-                onChange={handleInputChange}
-                className="w-full rounded-3xl border border-white/10 bg-slate-900/90 px-4 py-3 text-white transition outline-none focus:border-amber-400/60"
-                required
-              />
-            </label>
           </div>
 
           <Button
             type="submit"
-            disabled={!foundAppointment}
+            /* disabled={!foundAppointment} */
             className="w-full bg-amber-400 text-slate-950 hover:bg-amber-300 disabled:opacity-50"
             size="lg"
           >
@@ -229,8 +253,17 @@ export default function CancellationForm() {
               </p>
               <p>{phone}</p>
             </div>
-          </div>        
+          </div>
         </div>
+        <Button
+          asChild
+          size="lg"
+          className="w-full bg-amber-400 text-slate-950 hover:bg-amber-300 disabled:opacity-50"
+        >
+          <Link href="/">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to home
+          </Link>
+        </Button>
       </aside>
     </div>
   )
