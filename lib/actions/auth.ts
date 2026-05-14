@@ -133,8 +133,9 @@ export async function changeUserPwd(formData: FormData) {
     { password: newHashedPwd },
     { returnDocument: "after" }
   )
-
+console.log("updated user from auth", updatedUser)
   if (updatedUser) {
+    console.log("updated user", updatedUser)
     return JSON.parse(JSON.stringify(updatedUser))
   } else {
     return JSON.stringify({ message: "no user found" })
@@ -154,8 +155,10 @@ export async function handleSaveMongoUserData(formData: FormData) {
   const firstjob = formData.get("firstjob")
   const email = formData.get("email")
 
+const usersData: UserData[] = await UserData.find({}).lean();
+
   const mongoUserData = {
-    id: 2,
+    id: usersData[usersData.length - 1] ? usersData[usersData.length - 1].id + 1 : 1,
     firstname,
     lastname,
     email,

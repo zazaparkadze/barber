@@ -10,6 +10,8 @@ type DataContextType = {
   setSearch: React.Dispatch<React.SetStateAction<string>>
   isLoggedin: string
   setIsLoggedin: React.Dispatch<React.SetStateAction<string>>
+  success: boolean
+  setSuccess: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const DataContext = createContext<DataContextType | undefined>(undefined)
@@ -17,10 +19,24 @@ const DataContext = createContext<DataContextType | undefined>(undefined)
 export function DataProvider({ children }: { children: React.ReactNode }) {
   const [count, setCount] = useState(100)
   const [search, setSearch] = useState("catergory")
-   const [isLoggedin, setIsLoggedin] = useState<string>("true")
-   const [user, setUser] = useState('Guest')
+  const [isLoggedin, setIsLoggedin] = useState<string>("true")
+  const [success, setSuccess] = useState(false)
+  const [user, setUser] = useState("Guest")
   return (
-    <DataContext.Provider value={{ user, setUser, count, setCount, search, setSearch, isLoggedin, setIsLoggedin }}>
+    <DataContext.Provider
+      value={{
+        user,
+        setUser,
+        count,
+        setCount,
+        search,
+        setSearch,
+        isLoggedin,
+        setIsLoggedin,
+        success,
+        setSuccess,
+      }}
+    >
       {children}
     </DataContext.Provider>
   )

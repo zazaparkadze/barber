@@ -14,7 +14,7 @@ type MongoUserProfile = {
   searches: Array
   lastSearches: Array
 }
-type MongoUserData = {
+type UserData = {
   id: number
   firstname: string
   lastname: string

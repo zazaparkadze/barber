@@ -16,9 +16,9 @@ export default function page() {
     <div className="flex h-screen w-full flex-col items-center justify-center">
       <form
         action={async (formData) => {
-          const result : MongoUserData = await handleSaveMongoUserData(formData)
+          const result : UserData = await handleSaveMongoUserData(formData)
           if (result) {
-            router.push(`/changePassword/${(result.id).toString()}`)
+            router.push(`/feedback/informationSaved`)
           } else {
             router.refresh()
           }
