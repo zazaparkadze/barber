@@ -68,30 +68,22 @@ export async function handleRegister(formData: FormData) {
     return JSON.stringify({ message: "no credentials supplied" })
   }
 
-  const valPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])[^\s]{8,}$/.test(
-    password
-  )
+  const users: MongoUser[] = await User.find({}).lean()
 
-  if (valPass) {
-    const users: MongoUser[] = await User.find({}).lean()
-
-    const duplicate = await User.findOne({ username: username })
-    if (duplicate) {
-      return JSON.stringify({ message: "choose another username" })
-    }
-    const hashedPwd = await bcrypt.hash(password, 10)
-
-    const newRegister = {
-      id: users.length ? users[users.length - 1].id + 1 : 1,
-      username: username,
-      password: hashedPwd,
-      email: email,
-    }
-    const result = await User.create(newRegister)
-    return JSON.stringify(result)
-  } else {
-    return JSON.stringify({ message: "choose another password" })
+  const duplicate = await User.findOne({ username: username })
+  if (duplicate) {
+    return JSON.stringify({ message: "choose another username" })
   }
+  const hashedPwd = await bcrypt.hash(password, 10)
+
+  const newRegister = {
+    id: users.length ? users[users.length - 1].id + 1 : 1,
+    username: username,
+    password: hashedPwd,
+    email: email,
+  }
+  const result = await User.create(newRegister)
+  return JSON.stringify(result)
 }
 
 //forgot
