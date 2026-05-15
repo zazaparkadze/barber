@@ -6,6 +6,7 @@ import { MapPin, Phone, Wallet, AlertCircle, Check, Loader2 } from "lucide-react
 import { SERVICE_DURATIONS } from "@/app/config/hours"
 import {phone, address} from "@/app/config/address"
 import AnimateBookNow from "./animate-book-now"
+import Link from "next/link"
 
 
 interface FormData {
@@ -176,6 +177,13 @@ export default function ReservationForm() {
             >
               Make another appointment
             </Button>
+            <Link href={`/weather?date=${appointmentResult.appointment?.date}&time=${appointmentResult.appointment?.time}`}>
+            <Button
+            className="mt-4 bg-green-400 text-slate-950 hover:bg-green-300"
+            >
+              Check weather forecast for {appointmentResult.appointment?.date} at {appointmentResult.appointment?.time} 
+            </Button>
+            </Link>
           </div>
         </div>
       </div>
