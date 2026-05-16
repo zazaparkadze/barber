@@ -129,13 +129,13 @@ export default function ReservationForm() {
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-400/20 text-green-300">
             <Check className="h-6 w-6" />
           </div>
-          <div className="space-y-4">
+          <div className="space-y-4 flex flex-col items-start">
             <div>
               <h2 className="text-2xl font-semibold text-green-200">Appointment confirmed!</h2>
               <p className="mt-2 text-green-300/80">{appointmentResult.message}</p>
             </div>
 
-            <div className="space-y-3 rounded-[1.75rem] bg-green-950/50 p-4 text-sm text-green-200">
+            <div className="space-y-3 rounded-[1.75rem] bg-green-950/50 p-4 text-sm text-green-200 w-full">
               <p>
                 <strong>Name:</strong> {appointmentResult.appointment?.name}
               </p>

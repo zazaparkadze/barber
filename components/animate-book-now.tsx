@@ -15,24 +15,24 @@ export default function AnimateBookNow() {
   useEffect(() => {
     animate(
       scope.current,
-      { opacity: [0, 1], y: [-20, 0], scale: [0.95, 1.2] },
+      { opacity: [0.3, 1], scale: [0.95, 1.1], rotate: [0, 360] },
       {
         duration: 2.8,
         ease: "easeInOut",
         repeat: Infinity,
-        repeatType: "reverse",
+      repeatType: "reverse",
       }
     )
   }, [])
 
   return (
     <>
-      <div
+      {/* <div
         ref={scope}
         className="absolute top-10 right-1/12 w-fit -translate-x-1/2 rounded-full bg-[#d309e1] px-4 py-2 text-lg text-slate-900 shadow-[0_15px_40px_-20px_rgba(0,0,0,0.3)]"
       >
         Book Now
-      </div>
+      </div> */}
       {/* <motion.button
         initial={{ scale: 0.3 }}
         animate={{ scale: 1 }}
@@ -43,13 +43,15 @@ export default function AnimateBookNow() {
       </motion.button> */}
       <motion.div
         style={box}
+        className="text-center py-auto text-sm font-bold text-white"
         animate={{
           rotate: 360,
-          backgroundColor: ["#ff0088", "#d309e1", "#9c1aff", "#7700ff"],
-          scale: [0.8, 1.2, 1],
+          backgroundColor: ["#ff0088", "#d309e1"],
+         // scale: [0.9, 1.1],
+          
         }}
-        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-      />
+        transition={{ duration: 4, repeat: Infinity, ease: "linear"   }}
+      >B</motion.div>
     </>
   )
 }

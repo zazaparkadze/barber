@@ -9,7 +9,6 @@ import {
   Sparkles,
 } from "lucide-react"
 import { serviceTypesShort } from "./config/service-types-short"
-import AnimateBookNow from "@/components/animate-book-now"
 
 export default function Page() {
   return (
