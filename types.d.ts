@@ -1,14 +1,17 @@
 declare module '*.css'
 declare module 'bcrypt'
 
-type MongoUser = {
+type ArrayOfStrings = string[];
+type ArrayOfNumbers = number[];
+
+type User = {
   id: number
   username: string
   password: string
   refreshToken: string
   roles: object
 }
-type MongoUserProfile = {
+type UserProfile = {
   userId: number
   lastVisited: string
   searches: Array
@@ -86,8 +89,7 @@ interface Appointment {
   createdAt: Date
 }
 
-type ArrayOfStrings = string[];
-type ArrayOfNumbers = number[];
+
 
 type GeoResults = {
   [index: string]: string | number;
@@ -144,6 +146,7 @@ type MeteoResult = {
     temperature_2m: ArrayOfNumbers;
     wind_speed_10m: ArrayOfNumbers;
     relative_humidity_2m: ArrayOfNumbers;
+    precipitation_probability: ArrayOfNumbers;
   };
 };
 
@@ -156,7 +159,7 @@ type SearchObject = {
   hourly?: string;
   forecast_days?: string;
 };
-type SunsetSunrizeResult = {
+/* type SunsetSunrizeResult = {
   results: {
     date: string;
     sunrise: string;
@@ -172,16 +175,16 @@ type SunsetSunrizeResult = {
     utc_offset: number;
   };
   status: string;
-};
-
+}; */
+/* 
 type Post = {
   id: number;
   userId: string;
   title: string;
   body: string;
-};
+}; */
 
-type User = {
+/* type User = {
   id: number;
   name: string;
   username: string;
@@ -196,24 +199,16 @@ type User = {
       lng: string;
     };
   };
-};
+}; */
 
-type Params = {
-  params: {
-    userId: string;
-  };
-};
-
+/* 
 type Todo = {
   userId: number;
   id: number;
   title: string;
   completed: boolean;
 };
-type Employee = {
-  name: string;
-  occupation: string;
-};
+ */
 
 type Result = {
   pageid: string;

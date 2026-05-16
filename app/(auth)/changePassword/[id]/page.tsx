@@ -21,7 +21,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         action={async (formData) => {
 
           if (valPass) {
-            const result: MongoUser = await changeUserPwd(formData)
+            const result: User = await changeUserPwd(formData)
             if (result.id === Number(id)) {
               console.log("password changed successfully")
               setNewPwd("")

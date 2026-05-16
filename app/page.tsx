@@ -53,9 +53,18 @@ export default function Page() {
 
         <section className="grid gap-10 py-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
           <div className="space-y-6">
+            <div className="flex flex-col items-start gap-4">
             <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/25 bg-amber-400/10 px-4 py-2 text-sm font-semibold tracking-[0.24em] text-amber-200 uppercase">
               premium cut + grooming
             </span>
+            {new Date().getHours() >= 21 || new Date().getHours() < 9 ? (
+              <span className="inline-flex items-center gap-2 bg-transparent px-4 py-2 text-lg text-red-500">
+                Closed, Opens at 9am
+              </span>
+            ) :<span className="inline-flex items-center gap-2 bg-transparent px-4 py-2 text-2xl  text-green-500">
+                Open... till 8pm
+              </span>}
+              </div>
             <div className="space-y-5">
               <h2 className="text-5xl leading-tight font-semibold tracking-tight text-white sm:text-6xl">
                 Your next cut should feel effortless and look unforgettable.

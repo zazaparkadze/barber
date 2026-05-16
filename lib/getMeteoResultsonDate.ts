@@ -18,7 +18,7 @@ export default async function getMeteoResults(
   const url = "https://api.open-meteo.com/v1/forecast?" + searchParams
   const res = await fetch(url)
 
-  const data = await res.json()
+  const data: MeteoResult = await res.json()
   // Extract the hourly data for the specified date and time
   const hourlyData = data.hourly
   const timeHours = Number(time.split(":")[0])

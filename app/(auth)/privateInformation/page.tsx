@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { handleSaveMongoUserData } from "@/lib/actions/auth"
+import { handleSaveUserData } from "@/lib/actions/auth"
 
 export default function page() {
   const ref = useRef<HTMLInputElement>(null)
@@ -16,7 +16,7 @@ export default function page() {
     <div className="flex h-screen w-full flex-col items-center justify-center">
       <form
         action={async (formData) => {
-          const result : UserData = await handleSaveMongoUserData(formData)
+          const result : UserData = await handleSaveUserData(formData)
           if (result) {
             router.push(`/feedback/informationSaved`)
           } else {

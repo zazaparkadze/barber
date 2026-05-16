@@ -29,7 +29,7 @@ export default function page() {
         // className="flex h-100 w-100 flex-col items-center justify-center gap-4 rounded-3xl border-2 bg-stone-800 p-3"
         className="flex h-100 w-100 flex-col gap-6 rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 text-xl shadow-[0_40px_120px_-60px_rgba(255,255,255,0.2)] backdrop-blur-xl"
         action={async (formData) => {
-          const response: MongoUser = await handleLogin(formData)
+          const response: User = await handleLogin(formData)
           if (response.username === "noCredentials") {
             router.push(`/login`)
             setIsLoggedin("noCredentials")

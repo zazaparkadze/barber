@@ -4,10 +4,8 @@ import bcrypt from "bcrypt"
 import User from "@/model/User"
 import UserData from "@/model/UserData"
 
-//login
-
 export async function handleLogin(formData: FormData) {
-  connectDB()
+  await connectDB()
   const usr = formData.get("username") as string
   const pwd = formData.get("password") as string
 
@@ -23,7 +21,7 @@ export async function handleLogin(formData: FormData) {
     )
   }
 
-  const foundUser: MongoUser | null = await User.findOne({
+  const foundUser: User | null = await User.findOne({
     username: usr,
   }).lean()
 
@@ -56,10 +54,8 @@ export async function handleLogin(formData: FormData) {
   }
 }
 
-//register
-
 export async function handleRegister(formData: FormData) {
-  connectDB()
+  await connectDB()
   const username = formData.get("username") as string
   const password = formData.get("password") as string
   const email = formData.get("email") as string
@@ -68,7 +64,7 @@ export async function handleRegister(formData: FormData) {
     return JSON.stringify({ message: "no credentials supplied" })
   }
 
-  const users: MongoUser[] = await User.find({}).lean()
+  const users: User[] = await User.find({}).lean()
 
   const duplicate = await User.findOne({ username: username })
   if (duplicate) {
@@ -86,10 +82,9 @@ export async function handleRegister(formData: FormData) {
   return JSON.stringify(result)
 }
 
-//forgot
 
 export async function handleForgot(formData: FormData) {
-  connectDB()
+  await connectDB()
   const firstname = formData.get("firstname")
   const lastname = formData.get("lastname")
   const phone = formData.get("phone")
@@ -100,7 +95,7 @@ export async function handleForgot(formData: FormData) {
   const firstjob = formData.get("firstjob")
   const email = formData.get("email")
 
-  const mongoUserData = {
+  const UserDataObj = {
     firstname,
     lastname,
     email,
@@ -112,7 +107,7 @@ export async function handleForgot(formData: FormData) {
     firstjob,
   }
 
-  const userData: MongoUser = await UserData.findOne(mongoUserData).lean()
+  const userData = await UserData.findOne(UserDataObj).lean()
 
   if (userData) {
     return JSON.parse(JSON.stringify(userData))
@@ -124,11 +119,11 @@ export async function handleForgot(formData: FormData) {
 //change forgotten password
 
 export async function changeUserPwd(formData: FormData) {
-  connectDB()
+  await connectDB()
   const newPwd = formData.get("newPwd") as string
   const id = formData.get("id")
   const newHashedPwd = await bcrypt.hash(newPwd, 10)
-  const updatedUser: MongoUser | null = await User.findOneAndUpdate(
+  const updatedUser: User | null = await User.findOneAndUpdate(
     { id: Number(id) },
     { password: newHashedPwd },
     { returnDocument: "after" }
@@ -142,9 +137,8 @@ console.log("updated user from auth", updatedUser)
   }
 }
 
-export async function handleSaveMongoUserData(formData: FormData) {
-  // I should bring here id
-  connectDB()
+export async function handleSaveUserData(formData: FormData) {
+  await connectDB()
   const firstname = formData.get("firstname")
   const lastname = formData.get("lastname")
   const phone = formData.get("phone")
@@ -157,7 +151,7 @@ export async function handleSaveMongoUserData(formData: FormData) {
 
 const usersData: UserData[] = await UserData.find({}).lean();
 
-  const mongoUserData = {
+  const UserDataObj = {
     id: usersData[usersData.length - 1] ? usersData[usersData.length - 1].id + 1 : 1,
     firstname,
     lastname,
@@ -170,7 +164,7 @@ const usersData: UserData[] = await UserData.find({}).lean();
     firstjob,
   }
 
-  const userData: MongoUser = await UserData.create(mongoUserData)
+  const userData: User = await UserData.create(UserDataObj)
 
   if (userData) {
     return JSON.parse(JSON.stringify(userData))

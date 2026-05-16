@@ -16,7 +16,7 @@ export default function page() {
     <div className="flex h-screen w-full flex-col items-center justify-center">
       <form
         action={async (formData) => {
-          const result : MongoUser = await handleForgot(formData)
+          const result : User = await handleForgot(formData)
           if (result) {
             router.push(`/changePassword/${(result.id).toString()}`)
           } else {
