@@ -4,7 +4,12 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
 import { DataProvider } from "@/context/dataContext"
+import { Metadata } from "next"
 
+export const metadata: Metadata = {
+  title: "Barber's shop App",
+  description: "make reservations for barber services.",
+}
 const geist = Geist({subsets:['latin'],variable:'--font-sans'})
 
 const fontMono = Geist_Mono({
