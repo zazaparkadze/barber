@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/tooltip"
 
 export default function page() {
-  const { isLoggedin, setIsLoggedin, setUser } = useData()
+  const { isLoggedin, setIsLoggedin, setUsername } = useData()
   const router = useRouter()
   const ref = useRef<HTMLInputElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
@@ -47,7 +47,7 @@ export default function page() {
             return
           }
 
-          setUser(response.username)
+          setUsername(response.username)
           //  router.push(`account/${response.id.toString()}`)
           router.push("admin")
         }}
