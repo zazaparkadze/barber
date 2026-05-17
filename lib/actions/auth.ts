@@ -122,6 +122,7 @@ export async function changeUserPwd(formData: FormData) {
   await connectDB()
   const newPwd = formData.get("newPwd") as string
   const id = formData.get("id")
+
   const newHashedPwd = await bcrypt.hash(newPwd, 10)
   const updatedUser: User | null = await User.findOneAndUpdate(
     { id: Number(id) },
@@ -133,7 +134,7 @@ console.log("updated user from auth", updatedUser)
     console.log("updated user", updatedUser)
     return JSON.parse(JSON.stringify(updatedUser))
   } else {
-    return JSON.stringify({ message: "no user found" })
+    return null
   }
 }
 

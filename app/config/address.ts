@@ -1,6 +1,6 @@
 export const address = {
-    street: "13 Sderot Shamir",
-    city: "Beer Yakov",
+    street: "13, Dagan St.",
+    city: "Be'er Ya'akov",
     country: "Israel"
 }
 

@@ -9,6 +9,7 @@ import {
   Sparkles,
 } from "lucide-react"
 import { serviceTypesShort } from "./config/service-types-short"
+import DirectionsMap from "@/components/directions-map"
 
 export default function Page() {
   return (
@@ -32,7 +33,6 @@ export default function Page() {
             <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
               Crafting sharp looks with precision and polish.
             </h1>
-          
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <Button
@@ -42,10 +42,18 @@ export default function Page() {
             >
               <Link href="/reserve">Book now</Link>
             </Button>
-            <Button asChild size="lg" className="bg-amber-400 text-slate-950 hover:bg-amber-300">
+            <Button
+              asChild
+              size="lg"
+              className="bg-amber-400 text-slate-950 hover:bg-amber-300"
+            >
               <Link href="/login">Admin</Link>
             </Button>
-            <Button asChild size="lg" className="bg-amber-400 text-slate-950 hover:bg-amber-300">
+            <Button
+              asChild
+              size="lg"
+              className="bg-amber-400 text-slate-950 hover:bg-amber-300"
+            >
               <Link href="/cancellation">Cancellation</Link>
             </Button>
           </div>
@@ -54,17 +62,19 @@ export default function Page() {
         <section className="grid gap-10 py-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
           <div className="space-y-6">
             <div className="flex flex-col items-start gap-4">
-            <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/25 bg-amber-400/10 px-4 py-2 text-sm font-semibold tracking-[0.24em] text-amber-200 uppercase">
-              premium cut + grooming
-            </span>
-            {new Date().getHours() >= 21 || new Date().getHours() < 9 ? (
-              <span className="inline-flex items-center gap-2 bg-transparent px-4 py-2 text-lg text-red-500">
-                Closed, Opens at 9am
+              <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/25 bg-amber-400/10 px-4 py-2 text-sm font-semibold tracking-[0.24em] text-amber-200 uppercase">
+                premium cut + grooming
               </span>
-            ) :<span className="inline-flex items-center gap-2 bg-transparent px-4 py-2 text-2xl  text-green-500">
-                Open... till 8pm
-              </span>}
-              </div>
+              {new Date().getHours() >= 21 || new Date().getHours() < 9 ? (
+                <span className="inline-flex items-center gap-2 bg-transparent px-4 py-2 text-lg text-red-500">
+                  Closed, Opens at 9am
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-2 bg-transparent px-4 py-2 text-2xl text-green-500">
+                  Open... till 8pm
+                </span>
+              )}
+            </div>
             <div className="space-y-5">
               <h2 className="text-5xl leading-tight font-semibold tracking-tight text-white sm:text-6xl">
                 Your next cut should feel effortless and look unforgettable.
@@ -79,7 +89,7 @@ export default function Page() {
               <Button
                 asChild
                 size="lg"
-                className="bg-amber-400 text-slate-950 hove0r:bg-amber-300"
+                className="hove0r:bg-amber-300 bg-amber-400 text-slate-950"
               >
                 <Link href="/reserve">Reserve a seat</Link>
               </Button>
@@ -185,12 +195,31 @@ export default function Page() {
               <p>{email}</p>
             </div>
             <Button
-              className="mt-4 w-full justify-center gap-2 bg-amber-400 text-slate-950 hover:bg-amber-300"
+              className="mt-4 w-full justify-center gap-1.5 bg-amber-400 text-slate-950 hover:bg-amber-300"
               size="lg"
             >
-              Get directions <ArrowRight className="h-4 w-4" />
+              <a
+                href={`https://maps.google.com/?q=${encodeURIComponent(`${address.street}, ${address.city}, ${address.country}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex w-full justify-center gap-2"
+              >
+                Get directions <ArrowRight className="mt-0.5 h-4 w-4" />
+              </a>
             </Button>
           </div>
+        </section>
+
+        <section className="space-y-6 py-10">
+          <div className="space-y-2">
+            <p className="text-sm tracking-[0.24em] text-amber-300/80 uppercase">
+              Find us
+            </p>
+            <h2 className="text-4xl font-semibold tracking-tight text-white">
+              Visit us at our location
+            </h2>
+          </div>
+          <DirectionsMap />
         </section>
 
         <footer className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-8 text-slate-400 sm:flex-row sm:items-center sm:justify-between">

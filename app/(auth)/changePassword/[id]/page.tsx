@@ -21,12 +21,16 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
         action={async (formData) => {
 
           if (valPass) {
-            const result: User = await changeUserPwd(formData)
-            if (result.id === Number(id)) {
+            const result: User | null = await changeUserPwd(formData)
+            if (result?.id === Number(id)) {
               console.log("password changed successfully")
               setNewPwd("")
               setSuccess(true)
               router.refresh()
+            }
+            if (result === null) {
+              console.log("no user found")
+              router.refresh();
             }
           }
         }}
@@ -58,6 +62,11 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
             </Link>
           </div>
         )}
+        {/* {!success && newPwd !== "" && (
+          <div className="flex max-w-2xl flex-col items-center gap-7 rounded-2xl border border-red-200/30 bg-red-950/30 px-30 py-15 text-red-200 shadow-[0_30px_80px_-50px_rgba(0,0,0,0.45)]">
+            <p className="text-red-500">No user found</p>
+          </div>
+        )} */}
       </form>
     </div>
   )
