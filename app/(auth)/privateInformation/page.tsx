@@ -28,8 +28,12 @@ export default function page() {
           All Fields are required
         </p>
         <div className="m-3">
+          <Label className="text-xl">username</Label>
+          <Input name="username" ref={ref}></Input>
+        </div>
+        <div className="m-3">
           <Label className="text-xl">First Name</Label>
-          <Input name="firstname" ref={ref}></Input>
+          <Input name="firstname"></Input>
         </div>
         <div className="m-3">
           <Label className="text-xl">Last Name</Label>

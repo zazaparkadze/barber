@@ -140,6 +140,7 @@ console.log("updated user from auth", updatedUser)
 
 export async function handleSaveUserData(formData: FormData) {
   await connectDB()
+  const username = formData.get("username") as string
   const firstname = formData.get("firstname")
   const lastname = formData.get("lastname")
   const phone = formData.get("phone")
@@ -150,10 +151,13 @@ export async function handleSaveUserData(formData: FormData) {
   const firstjob = formData.get("firstjob")
   const email = formData.get("email")
 
-const usersData: UserData[] = await UserData.find({}).lean();
+const foundUser: User | null = await User.findOne({username}).lean();
 
+if (!foundUser) {
+  return null
+}
   const UserDataObj = {
-    id: usersData[usersData.length - 1] ? usersData[usersData.length - 1].id + 1 : 1,
+    id: foundUser.id,
     firstname,
     lastname,
     email,
