@@ -22,7 +22,7 @@ export default async function page({
   })
   //console.log(time, date)
   const meteoData = await result.json()
-  console.log(meteoData)
+ // console.log(meteoData)
 
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-linear-to-br from-green-900 to-green-800">

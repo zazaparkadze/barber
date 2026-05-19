@@ -26,7 +26,7 @@ export default async function getMeteoResults(
   const timeIndex = hourlyData.time.findIndex((t: string) => t === `${date}T${
     timeHours.toString().length === 1 ? `0${timeHours}` : timeHours}:00`)
    
-  console.log(data)
+  //console.log(data)
 
   if (timeIndex === -1) {
     const result = {
