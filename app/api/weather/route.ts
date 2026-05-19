@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import getGeoResults from "@/lib/getGeoResults"
-import getMeteoResults from "@/lib/getMeteoResults"
 import getMeteoResultsonDate from "@/lib/getMeteoResultsonDate"
 
 const allowedOrigins = [
@@ -19,7 +18,7 @@ function getCorsHeaders(origin: string | null) {
 }
 
 export async function OPTIONS(request: Request) {
-  const origin = request.headers.get("origin")
+  const origin = request.headers.get("origin") || 'http://localhost:3000'
   console.log("Received OPTIONS request from origin:", origin)
   return new NextResponse(null, {
     status: 204,
@@ -36,7 +35,7 @@ export async function GET(request: NextRequest) {
   const time = url.searchParams.get("time") as string
 
   const resRaw = await getGeoResults("Holon")
-  console.log(resRaw)
+
 
   const { latitude, longitude, name } = resRaw.results[0]
 
@@ -48,7 +47,7 @@ export async function GET(request: NextRequest) {
     date,
     time
   )
-  console.log(meteoResOnDate)
+  
   const response = {
     meteoResOnDate,
   }

@@ -28,9 +28,9 @@ export default function page() {
   )
   const valUsr = /^[a-zA-Z][a-zA-Z0-9_]{3,20}$/.test(usr)
   return (
-    <div className="flex h-screen flex-col items-center justify-center">
+    <div className="flex h-screen flex-col items-center justify-center max-w-full">
       <form
-        className="flex h-fit w-100 flex-col items-center justify-center gap-4 rounded-3xl border-2 bg-stone-800 px-3 py-8"
+        className="flex h-fit w-120 flex-col items-center justify-center gap-4 rounded-3xl border-2 bg-stone-800 px-3 py-8"
         ref={ref}
         action={async (formData) => {
           // check passwords
@@ -67,7 +67,7 @@ export default function page() {
       >
         <Label className="flex w-full justify-start pl-3 text-2xl">Username</Label>
         {!valUsr && (
-          <span className="text-amber-400">
+          <span className="text-amber-400 flex justify-start w-full pl-3">
             At least 4 characters, max 20, starting with a letter
           </span>
         )}
@@ -86,7 +86,7 @@ export default function page() {
         />
         <Label className="flex w-full justify-start pl-3 text-2xl">Password</Label>
         {!valPass ? (
-          <span className="text-amber-400">
+          <span className="text-amber-400 pl-3">
             Must contain at least one uppercase and lowercase letter, one digit
             and special character, 8 tokens minimum
           </span>
@@ -131,9 +131,9 @@ export default function page() {
         )}
         <Label className="flex w-full justify-start pl-3 text-2xl">Email</Label>
         <Input name="email" />
-        <Button type="submit" size="lg" className="text-xl hover:scale-115">
+        <Button type="submit" size="lg" className="text-xl hover:scale-115 w-full">
           submit
-        </Button>
+        </Button> 
         {registered === "choose another username" && (
           <p>Choose another username</p>
         )}

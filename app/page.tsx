@@ -47,7 +47,7 @@ export default function Page() {
               size="lg"
               className="bg-amber-400 text-slate-950 hover:bg-amber-300"
             >
-              <Link href="/login">Admin</Link>
+              <Link href="/login">Login</Link>
             </Button>
             <Button
               asChild

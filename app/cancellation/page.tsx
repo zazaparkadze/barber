@@ -263,6 +263,15 @@ export default function CancellationForm() {
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to home
           </Link>
         </Button>
+        <Button
+          asChild
+          size="lg"
+          className="w-full bg-amber-400 text-slate-950 hover:bg-amber-300 disabled:opacity-50"
+        >
+          <Link href="/login">
+            <ArrowLeft className="mr-2 h-4 w-4" /> login
+          </Link>
+        </Button>
       </aside>
     </div>
   )

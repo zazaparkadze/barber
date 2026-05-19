@@ -29,27 +29,27 @@ export default function page() {
         // className="flex h-100 w-100 flex-col items-center justify-center gap-4 rounded-3xl border-2 bg-stone-800 p-3"
         className="flex h-100 w-100 flex-col gap-6 rounded-[2rem] border border-white/10 bg-slate-900/80 p-8 text-xl shadow-[0_40px_120px_-60px_rgba(255,255,255,0.2)] backdrop-blur-xl"
         action={async (formData) => {
-          const response: User = await handleLogin(formData)
-          if (response.username === "noCredentials") {
+          const response = await handleLogin(formData)
+          if (response.serverResponse === "noCredentials") {
             router.push(`/login`)
             setIsLoggedin("noCredentials")
             return
           }
-          if (response.username === "unauthorised") {
+          if (response.serverResponse === "unauthorised") {
             router.push("/register")
             setIsLoggedin("unauthorised")
             return
           }
-          if (response.username === "forbidden") {
-            setIsLoggedin("false")
+          if (response.serverResponse === "forbidden") {
+            setIsLoggedin("forbidden")
             router.refresh()
             formRef.current?.reset()
             return
           }
-
+         
           setUsername(response.username)
           //  router.push(`account/${response.id.toString()}`)
-          router.push("admin")
+          router.push(`account/${response.username}/`)
         }}
       >
         <Label className="flex w-full justify-start pl-3 text-xl">
@@ -84,7 +84,7 @@ export default function page() {
             </TooltipTrigger>
             <TooltipContent side={"bottom"}>Click to Register</TooltipContent>
           </Tooltip>
-          {isLoggedin === "false" && (
+          {isLoggedin === "forbidden" && (
             <p className="text-2xl text-red-500">incorrect password</p>
           )}
           {isLoggedin === "noCredentials" && (

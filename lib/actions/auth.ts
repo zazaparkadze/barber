@@ -3,54 +3,86 @@ import connectDB from "@/lib/connectBD"
 import bcrypt from "bcrypt"
 import User from "@/model/User"
 import UserData from "@/model/UserData"
+import jwt from "jsonwebtoken"
+import { cookies } from "next/headers"
 
 export async function handleLogin(formData: FormData) {
   await connectDB()
+
   const usr = formData.get("username") as string
   const pwd = formData.get("password") as string
 
   if (!usr || !pwd) {
-    return JSON.parse(
-      JSON.stringify({
-        id: 0,
-        username: "noCredentials",
-        password: "",
-        refreshToken: "",
-        roles: {},
-      })
-    )
+    return {
+      serverResponse: "noCredentials",
+    }
   }
 
-  const foundUser: User | null = await User.findOne({
+  const foundUser = await User.findOne({
     username: usr,
-  }).lean()
+  }).exec()
 
   if (!foundUser) {
-    return JSON.parse(
-      JSON.stringify({
-        id: 0,
-        username: "unauthorised",
-        password: "",
-        refreshToken: "",
-        roles: {},
-      })
-    )
+    return {
+      serverResponse: "unauthorised",
+    }
   }
 
   const match = await bcrypt.compare(pwd, foundUser.password)
 
   if (!match) {
-    return JSON.parse(
-      JSON.stringify({
-        id: 0,
-        username: "forbidden",
-        password: "",
-        refreshToken: "",
-        roles: {},
-      })
-    )
+    return {
+      serverResponse: "forbidden",
+    }
   } else {
-    return JSON.parse(JSON.stringify(foundUser))
+    const accessToken = jwt.sign(
+      { id: foundUser.id, username: foundUser.username },
+      process.env.ACCESS_TOKEN_SECRET as string,
+      { expiresIn: "1h" }
+    )
+    const refreshToken = jwt.sign(
+      {
+        id: foundUser.id,
+        username: foundUser.username,
+        roles: foundUser.roles,
+      },
+      process.env.REFRESH_TOKEN_SECRET as string,
+      { expiresIn: "7d" }
+    )
+    try {
+      foundUser.refreshToken = refreshToken
+      await foundUser.save()
+      const response = {
+        username: foundUser.username,
+        id: foundUser.id,
+      }
+
+      // SET HTTPONLY COOKIE
+      const cookieStore = await cookies()
+
+      cookieStore.set("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 12, // half a day
+        path: "/",
+      })
+
+      cookieStore.set("accessToken", accessToken, {
+        httpOnly: false,
+        secure: false,
+        sameSite: "lax",
+        maxAge: 60 * 5, // 5 minutes
+        path: "/",
+      })
+
+      return JSON.parse(JSON.stringify(response))
+    } catch (error) {
+      console.error("LOGIN ERROR---:", error)
+      return {
+        error: "Internal Server Error from catch block",
+      }
+    }
   }
 }
 
@@ -81,7 +113,6 @@ export async function handleRegister(formData: FormData) {
   const result = await User.create(newRegister)
   return JSON.stringify(result)
 }
-
 
 export async function handleForgot(formData: FormData) {
   await connectDB()
@@ -129,9 +160,9 @@ export async function changeUserPwd(formData: FormData) {
     { password: newHashedPwd },
     { returnDocument: "after" }
   )
-console.log("updated user from auth", updatedUser)
+  
   if (updatedUser) {
-    console.log("updated user", updatedUser)
+    //console.log("updated user", updatedUser)
     return JSON.parse(JSON.stringify(updatedUser))
   } else {
     return null
@@ -151,11 +182,11 @@ export async function handleSaveUserData(formData: FormData) {
   const firstjob = formData.get("firstjob")
   const email = formData.get("email")
 
-const foundUser: User | null = await User.findOne({username}).lean();
+  const foundUser: User | null = await User.findOne({ username }).lean()
 
-if (!foundUser) {
-  return null
-}
+  if (!foundUser) {
+    return null
+  }
   const UserDataObj = {
     id: foundUser.id,
     firstname,
@@ -177,3 +208,4 @@ if (!foundUser) {
     return null
   }
 }
+

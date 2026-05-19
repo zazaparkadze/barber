@@ -7,7 +7,7 @@ const UserSchema = new Schema({
   username: String,
   password: String,
   email: String,
-  refreshTocken: { type: String, default: "" },
+  refreshToken: { type: String, default: "" },
   roles: {
     type: Object,
     default: {

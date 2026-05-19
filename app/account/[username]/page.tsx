@@ -11,25 +11,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import * as React from 'react'
 
-export default function AdminPage() {
+
+
+export default function AdminPage({ params }: {params: Promise<{username: string}>}) {
+  const { username } = React.use(params); 
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [deleting, setDeleting] = useState<number | null>(null)
 
   useEffect(() => {
-    fetchAppointments()
-  }, [])
 
-  const fetchAppointments = async () => {
+     const fetchAppointments = async () => {
     try {
       setLoading(true)
       setError(null)
       const response = await fetch("/api/appointments", {
         method: "GET",
+        credentials: 'include',
       })
-
+  
       if (!response.ok) {
         throw new Error("Failed to fetch appointments")
       }
@@ -43,6 +46,20 @@ export default function AdminPage() {
       setLoading(false)
     }
   }
+
+    fetchAppointments()
+  }, [])
+
+
+ const handleLogout = async () => {
+      const response = await fetch('/api/logout');
+
+      if(!response.ok) {
+        return {message: 'error in logging out'}
+      }
+
+      return response
+ }
 
   const handleDeleteAppointment = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete this appointment?")) {
@@ -87,12 +104,13 @@ export default function AdminPage() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
           <div className="flex w-full justify-between">
-          <h1 className="mb-2 text-4xl font-bold">Admin Dashboard</h1>
-          <Button asChild variant="outline" size="lg">
-            <Link href="/">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to home
-            </Link>
-          </Button>
+            <div className="text-xl text-amber-400">hello {username.charAt(0).toUpperCase() + username.slice(1)}</div>
+            <h1 className="mb-2 text-4xl font-bold">Admin Dashboard</h1>
+            <Button asChild variant="outline" size="lg">
+              <Link href="/">
+                <ArrowLeft className="mr-2 h-4 w-4" /> Back to home
+              </Link>
+            </Button>
           </div>
           <p className="text-gray-400">Manage all appointments</p>
         </div>
@@ -185,6 +203,13 @@ export default function AdminPage() {
             {appointments.length}
           </span>
         </div>
+        <div className="flex w-full justify-end">
+         <Button asChild variant="outline" size="lg" onClick={handleLogout}>
+              <Link href="/">
+                <ArrowLeft className="mr-2 h-4 w-4" /> logout
+              </Link>
+            </Button>
+            </div>
       </div>
     </div>
   )
