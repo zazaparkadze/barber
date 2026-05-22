@@ -36,9 +36,9 @@ export async function handleLogin(formData: FormData) {
     }
   } else {
     const accessToken = jwt.sign(
-      { id: foundUser.id, username: foundUser.username },
+      { id: foundUser.id, username: foundUser.username, roles: foundUser.roles },
       process.env.ACCESS_TOKEN_SECRET as string,
-      { expiresIn: "1h" }
+      { expiresIn: "5m" }
     )
     const refreshToken = jwt.sign(
       {
@@ -47,7 +47,7 @@ export async function handleLogin(formData: FormData) {
         roles: foundUser.roles,
       },
       process.env.REFRESH_TOKEN_SECRET as string,
-      { expiresIn: "7d" }
+      { expiresIn: "12hours" }
     )
     try {
       foundUser.refreshToken = refreshToken
@@ -69,8 +69,8 @@ export async function handleLogin(formData: FormData) {
       })
 
       cookieStore.set("accessToken", accessToken, {
-        httpOnly: false,
-        secure: false,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: 60 * 5, // 5 minutes
         path: "/",

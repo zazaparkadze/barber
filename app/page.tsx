@@ -24,7 +24,7 @@ export default function Page() {
     `,
       }}
     >
-      <div className="mx-auto flex min-h-screen max-w-6xl flex-col justify-between px-6 py-8 sm:px-8 lg:px-12">
+      <div className="mx-auto flex min-h-screen max-w-6xl flex-col justify-between px-6 py-8 sm:px-8 lg:px-12  bg-slate-900">
         <header className="flex flex-col gap-6 border-b border-white/10 pb-8 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-sm tracking-[0.32em] text-amber-300/80 uppercase">

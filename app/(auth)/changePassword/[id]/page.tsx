@@ -15,7 +15,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   const valPass= /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])[^\s]{8,}$/.test(newPwd)
   return (
-    <div className="mx-auto flex h-screen max-w-4xl flex-col items-center justify-center">
+    <div className="mx-auto flex h-screen max-w-4xl flex-col items-center justify-center  bg-slate-900">
       <form
         className="mx-auto flex h-screen flex-col items-center justify-center gap-5 text-amber-500"
         action={async (formData) => {

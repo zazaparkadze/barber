@@ -1,74 +1,88 @@
-import { NextRequest, NextResponse } from "next/server";
-//import { cookies } from "next/headers";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { allowedRoles } from "@/app/config/allowedRoles";
-//export const runtime = "nodejs";
+import { NextRequest, NextResponse } from "next/server"
+import jwt, { JwtPayload } from "jsonwebtoken"
+
 
 interface MyJwtPayload extends JwtPayload {
   roles: {
-    root?: number;
-    admin?: number;
-    editor?: number;
-    user: number;
-  };
+    root?: number
+    admin?: number
+    editor?: number
+    user: number
+  }
 }
 
-export  function proxy(request: NextRequest) {
-  const origin = request.headers.get("origin") || 'http://localhost:3000';
-  // user's roles from jwt
-  const refreshToken = request.cookies.get("refreshToken")?.value as string;
+export function proxy(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken")?.value as string
-  
-console.log(accessToken, refreshToken);
+  const refreshToken = request.cookies.get("refreshToken")?.value as string
 
- if (!refreshToken || !accessToken) {
-    return NextResponse.json(
-      { message: "No tokens" },
-      { status: 401 }
-    )
+  if (!accessToken && !refreshToken) {
+    return NextResponse.redirect(new URL("/login", request.url))
   }
-  try {
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!);
-    const userRoles = (decoded as MyJwtPayload).roles;
 
-    const allowedToSecrets = Object.values(userRoles)
-      .map((value) => Object.values(allowedRoles).indexOf(value) !== -1)
-      .find((e) => e === true);
-
-    if (!allowedToSecrets) {
-      return NextResponse.json(
-        { message: "not allowed (MDW), Reason: roles, from allowed-to-secrets" },
-        {
-          status: 403,
-          statusText: "FORBIDDEN (MDW), Reason: roles",
-          headers: {
-            "Access-Control-Allow-Origin": origin,
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Authorization",
-          },
-        }
-      );
+  if (accessToken) {
+    try {
+      jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET!)
+     
+      return NextResponse.next()
+    } catch {
+      //create new accessToken
+      const accessToken = jwt.sign(
+        { token: "new" },
+        process.env.ACCESS_TOKEN_SECRET!,
+        { expiresIn: "5m" }
+      )
+      const response = NextResponse.json(null, {
+        status: 204,
+        statusText: "new accessToken created ",
+      })
+      response.cookies.set({
+        name: "accessToken",
+        value: accessToken,
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 60 * 5,
+        path: "/",
+      })
+      return response
     }
-  } catch (error) {
-    return NextResponse.json(
-      { message: "not allowed (MDW) from server error", error: error },
-      {
-        status: 403,
-        statusText: "FORBIDDEN (MDW)",
-        headers: {
-          "Access-Control-Allow-Origin": origin,
-          "Access-Control-Allow-Credentials": "true",
-          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        },
-      }
-    );
   }
 
-  return NextResponse.next();
+  if (refreshToken) {
+    try {
+      const decoded = jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET!
+      ) as MyJwtPayload
+
+      const accessToken = jwt.sign(
+        {
+          id: decoded.id,
+          username: decoded.username,
+        },
+        process.env.ACCESS_TOKEN_SECRET!,
+        { expiresIn: "5m" }
+      )
+
+      const response = NextResponse.next()
+
+      response.cookies.set("accessToken", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 5,
+      })
+
+      return response
+    } catch {
+      return NextResponse.redirect(new URL("/login", request.url))
+    }
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {
-  matcher: ["/secret", "/account"],
-};
+  matcher: ["/account/:path*", "/secret/:path*", "/api/chanels/:path"],
+}

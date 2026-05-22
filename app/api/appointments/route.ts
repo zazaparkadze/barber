@@ -9,6 +9,7 @@ import {
 import { sendConfirmationSMS } from "@/app/actions"
 import { sendConfirmationEmail } from "@/lib/sendConfirmationEmail"
 import { SERVICE_DURATIONS } from "@/app/config/hours"
+import { verifyRoles } from "@/lib/verifyRoles"
 
 // Check availability for a given date and time
 export async function POST(request: NextRequest) {
@@ -66,7 +67,8 @@ export async function POST(request: NextRequest) {
     if (!available) {
       return NextResponse.json(
         {
-          error: "Time slot is no longer available. Another customer booked it.",
+          error:
+            "Time slot is no longer available. Another customer booked it.",
           requiresReschedule: true,
         },
         { status: 409 }
@@ -112,18 +114,25 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  try {
-    const appointments = await getAllAppointments()
+  if (verifyRoles(request)) {
+    try {
+      const appointments = await getAllAppointments()
+      return NextResponse.json({
+        success: true,
+        appointments,
+      })
+    } catch (error) {
+      console.error("Error fetching appointments:", error)
+      return NextResponse.json(
+        { error: "Failed to fetch appointments" },
+        { status: 500 }
+      )
+    }
+  } else {
     return NextResponse.json({
-      success: true,
-      appointments,
+      success: false,
+      reason: "roles"
     })
-  } catch (error) {
-    console.error("Error fetching appointments:", error)
-    return NextResponse.json(
-      { error: "Failed to fetch appointments" },
-      { status: 500 }
-    )
   }
 }
 

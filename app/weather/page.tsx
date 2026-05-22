@@ -25,7 +25,7 @@ export default async function page({
  // console.log(meteoData)
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center bg-linear-to-br from-green-900 to-green-800">
+    <div className="flex h-screen flex-col items-center justify-center bg-green-900/90">
       <div className="flex h-fit max-w-4xl flex-col items-center justify-center gap-10 rounded-lg border border-green-400 bg-green-950 p-10 text-green-400">
         <div className="text-3xl">Weather Forecast</div>
         <div className="flex flex-col items-center justify-center">

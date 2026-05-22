@@ -13,7 +13,7 @@ export default function page() {
     ref.current?.focus()
   })
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center">
+    <div className="flex h-screen w-full flex-col items-center justify-center  bg-slate-900">
       <form
         action={async (formData) => {
           const result : User = await handleForgot(formData)

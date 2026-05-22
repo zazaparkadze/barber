@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react"
 
 export default function ReservePage() {
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),
+    <main className="min-h-screen  bg-slate-900 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),
     _transparent_50%),radial-gradient(circle_at_bottom_right,_rgba(251,191,36,0.16),
     _transparent_35%),linear-gradient(180deg,#0b1122_0%,#02040d_100%)] text-white">
       <div className="mx-auto max-w-5xl px-6 py-10 sm:px-8 lg:px-12">

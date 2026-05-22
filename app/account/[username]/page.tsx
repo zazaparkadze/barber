@@ -11,55 +11,61 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import * as React from 'react'
+import * as React from "react"
 
-
-
-export default function AdminPage({ params }: {params: Promise<{username: string}>}) {
-  const { username } = React.use(params); 
+export default function AdminPage({
+  params,
+}: {
+  params: Promise<{ username: string }>
+}) {
+  const { username } = React.use(params)
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [deleting, setDeleting] = useState<number | null>(null)
+  const [mess, setMess] = useState("No appointments found")
 
   useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const response = await fetch("/api/appointments", {
+          method: "GET",
+          credentials: "include",
+        })
 
-     const fetchAppointments = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const response = await fetch("/api/appointments", {
-        method: "GET",
-        credentials: 'include',
-      })
-  
-      if (!response.ok) {
-        throw new Error("Failed to fetch appointments")
+        if (!response.ok) {
+          throw new Error("Failed to fetch appointments")
+        }
+
+        const data = await response.json()
+
+        if (data.reason === "roles") {
+          setMess("you are not allowed to view this Information")
+          return
+        }
+        setAppointments(data.appointments || [])
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred")
+        console.error("Error fetching appointments:", err)
+      } finally {
+        setLoading(false)
       }
-
-      const data = await response.json()
-      setAppointments(data.appointments || [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred")
-      console.error("Error fetching appointments:", err)
-    } finally {
-      setLoading(false)
     }
-  }
 
     fetchAppointments()
   }, [])
 
+  const handleLogout = async () => {
+    const response = await fetch("/api/logout")
 
- const handleLogout = async () => {
-      const response = await fetch('/api/logout');
+    if (!response.ok) {
+      return { message: "error in logging out" }
+    }
 
-      if(!response.ok) {
-        return {message: 'error in logging out'}
-      }
-
-      return response
- }
+    return response
+  }
 
   const handleDeleteAppointment = async (id: number) => {
     if (!window.confirm("Are you sure you want to delete this appointment?")) {
@@ -104,7 +110,9 @@ export default function AdminPage({ params }: {params: Promise<{username: string
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
           <div className="flex w-full justify-between">
-            <div className="text-xl text-amber-400">hello {username.charAt(0).toUpperCase() + username.slice(1)}</div>
+            <div className="text-xl text-amber-400">
+              hello {username.charAt(0).toUpperCase() + username.slice(1)}
+            </div>
             <h1 className="mb-2 text-4xl font-bold">Admin Dashboard</h1>
             <Button asChild variant="outline" size="lg">
               <Link href="/">
@@ -122,9 +130,7 @@ export default function AdminPage({ params }: {params: Promise<{username: string
 
         <div className="rounded-lg bg-gray-800 shadow-xl">
           {appointments.length === 0 ? (
-            <div className="p-8 text-center text-gray-400">
-              No appointments found
-            </div>
+            <div className="p-8 text-center text-gray-400">{mess}</div>
           ) : (
             <Table>
               <TableHeader className="border-b border-gray-600 bg-gray-700">
@@ -204,12 +210,12 @@ export default function AdminPage({ params }: {params: Promise<{username: string
           </span>
         </div>
         <div className="flex w-full justify-end">
-         <Button asChild variant="outline" size="lg" onClick={handleLogout}>
-              <Link href="/">
-                <ArrowLeft className="mr-2 h-4 w-4" /> logout
-              </Link>
-            </Button>
-            </div>
+          <Button asChild variant="outline" size="lg" onClick={handleLogout}>
+            <Link href="/">
+              <ArrowLeft className="mr-2 h-4 w-4" /> logout
+            </Link>
+          </Button>
+        </div>
       </div>
     </div>
   )

@@ -13,10 +13,10 @@ export default function page() {
     ref.current?.focus()
   })
   return (
-    <div className="flex h-screen w-full flex-col items-center justify-center">
+    <div className="flex h-screen w-full flex-col items-center justify-center bg-slate-900">
       <form
         action={async (formData) => {
-          const result : UserData = await handleSaveUserData(formData)
+          const result: UserData = await handleSaveUserData(formData)
           if (result) {
             router.push(`/feedback/informationSaved`)
           } else {
@@ -71,7 +71,10 @@ export default function page() {
           <Button className="h-10 text-xl" type="submit">
             submit
           </Button>
-          <p className="text-center text-xl text-amber-600 brightness-150 mt-3"> Must contain correct information!</p>
+          <p className="mt-3 text-center text-xl text-amber-600 brightness-150">
+            {" "}
+            Must contain correct information!
+          </p>
         </div>
       </form>
     </div>

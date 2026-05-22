@@ -28,9 +28,9 @@ export default function page() {
   )
   const valUsr = /^[a-zA-Z][a-zA-Z0-9_]{3,20}$/.test(usr)
   return (
-    <div className="flex h-screen flex-col items-center justify-center max-w-full">
+    <div className="flex h-screen max-w-full flex-col items-center justify-center bg-slate-900">
       <form
-        className="flex h-fit w-120 flex-col items-center justify-center gap-4 rounded-3xl border-2 bg-stone-800 px-3 py-8"
+        className="flex h-fit w-120 flex-col items-center justify-center gap-4 rounded-3xl border-2 bg-slate-900 px-3 py-8"
         ref={ref}
         action={async (formData) => {
           // check passwords
@@ -65,9 +65,11 @@ export default function page() {
           }
         }}
       >
-        <Label className="flex w-full justify-start pl-3 text-2xl">Username</Label>
+        <Label className="flex w-full justify-start pl-3 text-2xl">
+          Username
+        </Label>
         {!valUsr && (
-          <span className="text-amber-400 flex justify-start w-full pl-3">
+          <span className="flex w-full justify-start pl-3 text-amber-400">
             At least 4 characters, max 20, starting with a letter
           </span>
         )}
@@ -84,9 +86,11 @@ export default function page() {
             valUsr && "text-green-500"
           )}
         />
-        <Label className="flex w-full justify-start pl-3 text-2xl">Password</Label>
+        <Label className="flex w-full justify-start pl-3 text-2xl">
+          Password
+        </Label>
         {!valPass ? (
-          <span className="text-amber-400 pl-3">
+          <span className="pl-3 text-amber-400">
             Must contain at least one uppercase and lowercase letter, one digit
             and special character, 8 tokens minimum
           </span>
@@ -131,9 +135,13 @@ export default function page() {
         )}
         <Label className="flex w-full justify-start pl-3 text-2xl">Email</Label>
         <Input name="email" />
-        <Button type="submit" size="lg" className="text-xl hover:scale-115 w-full">
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full text-xl hover:scale-102"
+        >
           submit
-        </Button> 
+        </Button>
         {registered === "choose another username" && (
           <p>Choose another username</p>
         )}
@@ -141,7 +149,7 @@ export default function page() {
         {registered === "error" && <p>unknown error</p>}
         {!passMatch && rptPass && <p className="text-red-700">no match</p>}
         {passMatch && valPass && (
-          <p className="text-green-700 text-xl">VALID PASSWORD</p>
+          <p className="text-xl text-green-700">VALID PASSWORD</p>
         )}
         {isLoggedin === "unauthorised" && (
           <p className="text-2xl text-red-500">no account, register</p>

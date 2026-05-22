@@ -227,3 +227,16 @@ type SearchResults = {
     pages?: Result[];
   };
 };
+
+
+interface MyJwtPayload extends JwtPayload {
+  [index: string]: {
+    [index: string]: number
+  }
+  roles: {
+    root?: number;
+    admin?: number;
+    editor?: number;
+    user: number;
+  };
+}
