@@ -28,7 +28,6 @@ export function GET(request: NextRequest) {
     const allowedToSecrets = Object.values(userRoles)
       .map((value) => Object.values(allowedRoles).indexOf(value) !== -1)
       .find((e) => e === true)
-    console.log(allowedToSecrets)
 
     if (!allowedToSecrets) {
       return NextResponse.json(
