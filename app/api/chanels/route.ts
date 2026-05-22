@@ -44,7 +44,7 @@ export function GET(request: NextRequest) {
 
     return NextResponse.json(
       {
-        chanels: ["11", "12", "13"],
+        chanels: "Chanel 12", 
         origin: request.headers.get("origin") || "http://localhost:3000",
       },
       {

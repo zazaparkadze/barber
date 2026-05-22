@@ -202,20 +202,25 @@ export default function AdminPage({
             </Table>
           )}
         </div>
-
-        <div className="mt-6 text-sm text-gray-400">
-          Total appointments:{" "}
-          <span className="font-semibold text-white">
-            {appointments.length}
-          </span>
-        </div>
-        <div className="flex w-full justify-end">
+        <div className="mt-6 flex w-full justify-between">
+          <div className="block text-sm text-gray-400">
+            Total appointments:{" "}
+            <span className="font-semibold text-white">
+              {appointments.length}
+            </span>
+          </div>
           <Button asChild variant="outline" size="lg" onClick={handleLogout}>
             <Link href="/">
               <ArrowLeft className="mr-2 h-4 w-4" /> logout
             </Link>
           </Button>
         </div>
+
+        <Button asChild variant="outline" size="lg">
+            <Link href="/secret">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Secret
+            </Link>
+          </Button>
       </div>
     </div>
   )
